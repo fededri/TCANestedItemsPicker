@@ -6,7 +6,7 @@
 //
 
 import ComposableArchitecture
-@testable import ItemsPicker
+@testable import TCANestedItemsPicker
 import Foundation
 
 let rootItems: [PickerItemModel<String>] = [

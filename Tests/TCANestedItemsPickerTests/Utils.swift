@@ -5,7 +5,7 @@
 //  Created by Federico Torres on 16/05/25.
 //
 
-@testable import ItemsPicker
+@testable import TCANestedItemsPicker
 import ComposableArchitecture
 import Foundation
 

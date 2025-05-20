@@ -5,7 +5,7 @@
 //  Created by Federico Torres on 16/05/25.
 //
 
-@testable import ItemsPicker
+@testable import TCANestedItemsPicker
 import Testing
 import ComposableArchitecture
 import Foundation
@@ -302,19 +302,4 @@ struct NestedItemsPickerTests {
             state.nested = []
         }
     }
-}
-
-// Add DependencyKey for NestedItemsRepository if not already present
-extension DependencyValues {
-    var nestedItemsRepository: NestedItemsRepository<String> { // Use concrete type for tests
-        get { self[NestedItemsRepositoryKey.self] }
-        set { self[NestedItemsRepositoryKey.self] = newValue }
-    }
-}
-
-// Define the DependencyKey
-private struct NestedItemsRepositoryKey: TestDependencyKey {
-    // Provide a default value (e.g., the mock repository) for tests
-    static let testValue = itemsRepository // Assuming 'itemsRepository' is the mock defined in NestedItemsRepository.swift
-    // static let previewValue = itemsRepository // Add preview value if needed
 }
