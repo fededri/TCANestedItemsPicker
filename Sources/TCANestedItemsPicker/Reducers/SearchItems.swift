@@ -9,40 +9,37 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct SearchItems<ID: Hashable & Sendable>: Reducer {
-    typealias PickerModel = PickerItemModel<ID>
+public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
+    public typealias PickerModel = PickerItemModel<ID>
     private let nestedItemsRepository: NestedItemsRepository<ID>
 
-    init(repository: NestedItemsRepository<ID>) {
+    public init(repository: NestedItemsRepository<ID>) {
         self.nestedItemsRepository = repository
     }
 
     @ObservableState
-    struct State: Equatable {
-        var searchQuery = ""
-
-        var searchResults: IdentifiedArrayOf<PickerModel> = []
+    public struct State: Equatable {
+        public var searchQuery = ""
+        public var searchResults: IdentifiedArrayOf<PickerModel> = []
+        
+        public init(searchQuery: String = "") {
+            self.searchQuery = searchQuery
+        }
     }
 
     @CasePathable
-    enum Action: BindableAction {
+    public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case searchQueryChanged(String)
-
-        // Action triggered by view after debounce
         case searchQueryDebounced
-
         case setSearchResults(Result<IdentifiedArrayOf<PickerModel>, Error>)
-
-        // Delegate action for parent communication
         case delegate(DelegateAction)
-
-        case clearSearchQuery // Add back action for clear button intent
+        case clearSearchQuery
     }
 
     // actions the parent should handle
     @CasePathable
-    enum DelegateAction: Equatable {
+    public enum DelegateAction: Equatable {
         case searchCleared
         case searchFailed
     }
@@ -50,7 +47,7 @@ struct SearchItems<ID: Hashable & Sendable>: Reducer {
     // Re-introduce CancelID for the network request
     enum CancelID { case searchRequest }
 
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         BindingReducer()
 
         Reduce { state, action in

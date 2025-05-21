@@ -8,11 +8,11 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct NestedItemsPickerView<ID: Hashable & Sendable, EmptyStateContent: View>: View {
+public struct NestedItemsPickerView<ID: Hashable & Sendable, EmptyStateContent: View>: View {
     @ComposableArchitecture.Bindable var store: StoreOf<NestedItemsPicker<ID>>
     let emptyStateContent: (NestedItemsPicker<ID>.EmptyStateReason) -> EmptyStateContent
 
-    init(
+    public init(
         store: StoreOf<NestedItemsPicker<ID>>,
         @ViewBuilder emptyStateContent: @escaping (NestedItemsPicker<ID>.EmptyStateReason) -> EmptyStateContent
     ) {
@@ -20,7 +20,7 @@ struct NestedItemsPickerView<ID: Hashable & Sendable, EmptyStateContent: View>: 
         self.emptyStateContent = emptyStateContent
     }
 
-    var body: some View {
+    public var body: some View {
         WithPerceptionTracking {
             NavigationStack {
                 Form {

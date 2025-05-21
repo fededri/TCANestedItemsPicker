@@ -7,16 +7,28 @@
 
 import ComposableArchitecture
 
-struct NestedItemsRepository<ID: Hashable & Sendable> {
-    typealias Model = PickerItemModel<ID>
+public struct NestedItemsRepository<ID: Hashable & Sendable>: Sendable {
+    public typealias Model = PickerItemModel<ID>
 
     // returns all items that should be showed in the first page
-    var rootItems: @Sendable () async throws  -> IdentifiedArrayOf<Model>
+    public var rootItems: @Sendable () async throws  -> IdentifiedArrayOf<Model>
     /// returns the direct children of a given parent item (only the first descendant level)
-    var childrenItemsByParentId: @Sendable (ID) async throws -> IdentifiedArrayOf<Model>
+    public var childrenItemsByParentId: @Sendable (ID) async throws -> IdentifiedArrayOf<Model>
 
     /// given an item ID, returns the ID of all its children (not only the first level)
-    var allDescendantsIDs: @Sendable (ID) async -> [ID]
+    public var allDescendantsIDs: @Sendable (ID) async -> [ID]
     /// Searches through all available items for a match in the display name.
-    var searchItems: @Sendable (String) async -> IdentifiedArrayOf<Model>
+    public var searchItems: @Sendable (String) async -> IdentifiedArrayOf<Model>
+    
+    public init(
+        rootItems: @escaping @Sendable () async throws -> IdentifiedArrayOf<Model>,
+        childrenItemsByParentId: @escaping @Sendable (ID) async throws -> IdentifiedArrayOf<Model>,
+        allDescendantsIDs: @escaping @Sendable (ID) async -> [ID],
+        searchItems: @escaping @Sendable (String) async -> IdentifiedArrayOf<Model>
+    ) {
+        self.rootItems = rootItems
+        self.childrenItemsByParentId = childrenItemsByParentId
+        self.allDescendantsIDs = allDescendantsIDs
+        self.searchItems = searchItems
+    }
 }
