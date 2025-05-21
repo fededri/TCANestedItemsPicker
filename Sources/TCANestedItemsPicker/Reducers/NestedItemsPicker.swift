@@ -5,7 +5,6 @@
 //  Created by Federico Torres on 16/05/25.
 //
 
-
 import ComposableArchitecture
 import Foundation
 
@@ -44,7 +43,7 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
             showSelectedChildrenCount: Bool,
             showSearchBar: Bool = true,
             title: String = "",
-            allSelectedItems: Shared<Set<ID>>,
+            allSelectedItems: Shared<Set<ID>> = Shared(value: []),
         ) {
             self.id = id
             self.pickerModel = pickerModel
@@ -76,7 +75,6 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
             self.title = title
             self._allSelectedItems = allSelectedItems
 
-            // Map initial items directly
             self.nested = mapItemsToNestedState(
                 initialItems,
                 parentIncludeChildrenEnabled: includeChildrenEnabled,
@@ -115,7 +113,6 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
     #endif
     }
 
-
     public enum EmptyStateReason {
         case noChildrenFound
         case searchResultEmpty
@@ -138,9 +135,7 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
     }
 
     public var body: some ReducerOf<Self> {
-
         Reduce { state, action in
-            print("Received action: \(String(describing: action))")
             switch action {
             case .binding:
                 return .none
@@ -156,7 +151,6 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
                     }
                 }
             case .onFirstAppear:
-                // Only fetch if nested items are not already populated (e.g., by initializer)
                 guard state.nested.isEmpty else { return .none }
 
                 if state.showSearchBar {
@@ -253,12 +247,10 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
         }
     }
 
-    // MARK: - Private Helpers
     private func handleToggleSelection(state: inout State) -> Effect<Action> {
         var effects: [Effect<Action>] = []
 
         if state.includeChildrenEnabled {
-            // Capture the values we need from state before the escaping closure
             let currentId = state.id
             let isSelected = state.isSelected
 
@@ -321,7 +313,6 @@ fileprivate extension Set {
         }
     }
 }
-
 
 fileprivate extension NestedItemsPicker.Action {
     var containsToggleSelection: Bool {

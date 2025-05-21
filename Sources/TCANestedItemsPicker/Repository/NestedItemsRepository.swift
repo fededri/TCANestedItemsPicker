@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NestedItemsRepository.swift
 //  TCANestedItemsPicker
 //
 //  Created by Federico Torres on 16/05/25.
@@ -10,8 +10,6 @@ import ComposableArchitecture
 public struct NestedItemsRepository<ID: Hashable & Sendable>: Sendable {
     public typealias Model = PickerItemModel<ID>
 
-    // returns all items that should be showed in the first page
-    public var rootItems: @Sendable () async throws  -> IdentifiedArrayOf<Model>
     /// returns the direct children of a given parent item (only the first descendant level)
     public var childrenItemsByParentId: @Sendable (ID) async throws -> IdentifiedArrayOf<Model>
 
@@ -21,12 +19,10 @@ public struct NestedItemsRepository<ID: Hashable & Sendable>: Sendable {
     public var searchItems: @Sendable (String) async -> IdentifiedArrayOf<Model>
     
     public init(
-        rootItems: @escaping @Sendable () async throws -> IdentifiedArrayOf<Model>,
         childrenItemsByParentId: @escaping @Sendable (ID) async throws -> IdentifiedArrayOf<Model>,
         allDescendantsIDs: @escaping @Sendable (ID) async -> [ID],
         searchItems: @escaping @Sendable (String) async -> IdentifiedArrayOf<Model>
     ) {
-        self.rootItems = rootItems
         self.childrenItemsByParentId = childrenItemsByParentId
         self.allDescendantsIDs = allDescendantsIDs
         self.searchItems = searchItems

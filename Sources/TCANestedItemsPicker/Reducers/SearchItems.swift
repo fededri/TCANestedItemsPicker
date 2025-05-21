@@ -37,14 +37,12 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
         case clearSearchQuery
     }
 
-    // actions the parent should handle
     @CasePathable
     public enum DelegateAction: Equatable {
         case searchCleared
         case searchFailed
     }
 
-    // Re-introduce CancelID for the network request
     enum CancelID { case searchRequest }
 
     public var body: some ReducerOf<Self> {
@@ -60,7 +58,6 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
 
                 if state.searchQuery.isEmpty {
                     state.searchResults = []
-                    // Send delegate action AND cancel
                     return .concatenate(
                         .cancel(id: CancelID.searchRequest),
                         .send(.delegate(.searchCleared))
@@ -71,11 +68,9 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
                 return .none
 
             case .clearSearchQuery:
-                // Check if already empty to avoid redundant work
                 guard !state.searchQuery.isEmpty else { return .none }
                 state.searchQuery = ""
                 state.searchResults = []
-                // Send delegate action AND cancel
                 return .concatenate(
                     .cancel(id: CancelID.searchRequest),
                     .send(.delegate(.searchCleared))
@@ -87,7 +82,6 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
                     return .cancel(id: CancelID.searchRequest)
                 }
 
-                // Perform the actual search, making it cancellable
                 return .run { [query = state.searchQuery] send in
                     await send(.setSearchResults(
                         Result(catching: {
@@ -98,7 +92,6 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
                 .cancellable(id: CancelID.searchRequest, cancelInFlight: true)
 
             case .setSearchResults(.success(let items)):
-                // Only update if the search query hasn't become empty since the request started
                 guard !state.searchQuery.isEmpty else {
                    return .none
                 }
@@ -106,12 +99,10 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
                 return .none
 
             case .setSearchResults(.failure):
-                 // Only process failure if query is still active
                 guard !state.searchQuery.isEmpty else {
                    return .none
                 }
                 state.searchResults = []
-                // Send delegate action on failure
                 return .send(.delegate(.searchFailed))
 
             case .delegate:
