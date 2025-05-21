@@ -21,6 +21,7 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
     public struct State: Equatable {
         public var searchQuery = ""
         public var searchResults: IdentifiedArrayOf<PickerModel> = []
+        public var isLoading = false
         
         public init(searchQuery: String = "") {
             self.searchQuery = searchQuery
@@ -41,6 +42,8 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
     public enum DelegateAction: Equatable {
         case searchCleared
         case searchFailed
+        case searchLoadingStarted
+        case searchLoadingFinished
     }
 
     enum CancelID { case searchRequest }
@@ -82,28 +85,40 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
                     return .cancel(id: CancelID.searchRequest)
                 }
 
-                return .run { [query = state.searchQuery] send in
-                    await send(.setSearchResults(
-                        Result(catching: {
-                            await nestedItemsRepository.searchItems(query)
-                        })
-                    ))
-                }
-                .cancellable(id: CancelID.searchRequest, cancelInFlight: true)
+                state.isLoading = true
+                
+                return .concatenate(
+                    .send(.delegate(.searchLoadingStarted)),
+                    .run { [query = state.searchQuery] send in
+                        await send(.setSearchResults(
+                            Result(catching: {
+                                await nestedItemsRepository.searchItems(query)
+                            })
+                        ))
+                    }
+                    .cancellable(id: CancelID.searchRequest, cancelInFlight: true)
+                )
 
             case .setSearchResults(.success(let items)):
+                state.isLoading = false
+                
                 guard !state.searchQuery.isEmpty else {
-                   return .none
+                   return .send(.delegate(.searchLoadingFinished))
                 }
                 state.searchResults = items
-                return .none
+                return .send(.delegate(.searchLoadingFinished))
 
             case .setSearchResults(.failure):
+                state.isLoading = false
+                
                 guard !state.searchQuery.isEmpty else {
-                   return .none
+                   return .send(.delegate(.searchLoadingFinished))
                 }
                 state.searchResults = []
-                return .send(.delegate(.searchFailed))
+                return .concatenate(
+                    .send(.delegate(.searchFailed)),
+                    .send(.delegate(.searchLoadingFinished))
+                )
 
             case .delegate:
                 return .none
