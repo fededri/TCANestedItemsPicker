@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SelectedChildrenCount.swift
 //  TCANestedItemsPicker
 //
 //  Created by Federico Torres on 16/05/25.
@@ -10,23 +10,22 @@ import ComposableArchitecture
 import SwiftUI
 
 @Reducer
-struct SelectedChildrenCount<ID: Hashable & Sendable>: Reducer {
+public struct SelectedChildrenCount<ID: Hashable & Sendable>: Reducer, Sendable {
 
     private let repository: NestedItemsRepository<ID>
 
-    init(repository: NestedItemsRepository<ID>) {
+    public init(repository: NestedItemsRepository<ID>) {
         self.repository = repository
     }
 
     @ObservableState
-    struct State: Equatable {
+    public struct State: Equatable {
         @ObservationStateIgnored
         @Shared var allSelectedItems: Set<ID>
-        let item: PickerItemModel<ID>
-        var selectedChildrenCount: Int = 0
+        public let item: PickerItemModel<ID>
+        public var selectedChildrenCount: Int = 0
 
-
-        var countDisplayText: String {
+        public var countDisplayText: String {
             if selectedChildrenCount > 0 {
                 "\(selectedChildrenCount) included"
             } else {
@@ -36,14 +35,14 @@ struct SelectedChildrenCount<ID: Hashable & Sendable>: Reducer {
     }
 
     @CasePathable
-    enum Action {
+    public enum Action {
         case computeSelectedChildrenCount
         case countSelectedChildren([ID])
     }
 
     enum CancelID { case computeSelectedChildren }
 
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .computeSelectedChildrenCount:
@@ -58,14 +57,9 @@ struct SelectedChildrenCount<ID: Hashable & Sendable>: Reducer {
             case .countSelectedChildren(let descendantIds):
                 var count = 0
                 if !descendantIds.isEmpty {
-                    print("calculated: calculating count")
                     count = descendantIds.filter({ state.allSelectedItems.contains($0)
                     }).count
-                } else {
-                    print("skipping calculation")
                 }
-
-                print("Calculated count for item id: \(state.item.id): \(count)")
                 state.selectedChildrenCount = count
                 return .none
             }

@@ -9,48 +9,42 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct SearchItems<ID: Hashable & Sendable>: Reducer {
-    typealias PickerModel = PickerItemModel<ID>
+public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
+    public typealias PickerModel = PickerItemModel<ID>
     private let nestedItemsRepository: NestedItemsRepository<ID>
 
-    init(repository: NestedItemsRepository<ID>) {
+    public init(repository: NestedItemsRepository<ID>) {
         self.nestedItemsRepository = repository
     }
 
     @ObservableState
-    struct State: Equatable {
-        var searchQuery = ""
-
-        var searchResults: IdentifiedArrayOf<PickerModel> = []
+    public struct State: Equatable {
+        public var searchQuery = ""
+        public var searchResults: IdentifiedArrayOf<PickerModel> = []
+        public var isLoading = false
     }
 
     @CasePathable
-    enum Action: BindableAction {
+    public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case searchQueryChanged(String)
-
-        // Action triggered by view after debounce
         case searchQueryDebounced
-
         case setSearchResults(Result<IdentifiedArrayOf<PickerModel>, Error>)
-
-        // Delegate action for parent communication
         case delegate(DelegateAction)
-
-        case clearSearchQuery // Add back action for clear button intent
+        case clearSearchQuery
     }
 
-    // actions the parent should handle
     @CasePathable
-    enum DelegateAction: Equatable {
+    public enum DelegateAction: Equatable {
         case searchCleared
         case searchFailed
+        case searchLoadingStarted
+        case searchLoadingFinished
     }
 
-    // Re-introduce CancelID for the network request
     enum CancelID { case searchRequest }
 
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         BindingReducer()
 
         Reduce { state, action in
@@ -63,7 +57,6 @@ struct SearchItems<ID: Hashable & Sendable>: Reducer {
 
                 if state.searchQuery.isEmpty {
                     state.searchResults = []
-                    // Send delegate action AND cancel
                     return .concatenate(
                         .cancel(id: CancelID.searchRequest),
                         .send(.delegate(.searchCleared))
@@ -74,11 +67,9 @@ struct SearchItems<ID: Hashable & Sendable>: Reducer {
                 return .none
 
             case .clearSearchQuery:
-                // Check if already empty to avoid redundant work
                 guard !state.searchQuery.isEmpty else { return .none }
                 state.searchQuery = ""
                 state.searchResults = []
-                // Send delegate action AND cancel
                 return .concatenate(
                     .cancel(id: CancelID.searchRequest),
                     .send(.delegate(.searchCleared))
@@ -90,32 +81,40 @@ struct SearchItems<ID: Hashable & Sendable>: Reducer {
                     return .cancel(id: CancelID.searchRequest)
                 }
 
-                // Perform the actual search, making it cancellable
-                return .run { [query = state.searchQuery] send in
-                    await send(.setSearchResults(
-                        Result(catching: {
-                            await nestedItemsRepository.searchItems(query)
-                        })
-                    ))
-                }
-                .cancellable(id: CancelID.searchRequest, cancelInFlight: true)
+                state.isLoading = true
+                
+                return .concatenate(
+                    .send(.delegate(.searchLoadingStarted)),
+                    .run { [query = state.searchQuery] send in
+                        await send(.setSearchResults(
+                            Result(catching: {
+                                await nestedItemsRepository.searchItems(query)
+                            })
+                        ))
+                    }
+                    .cancellable(id: CancelID.searchRequest, cancelInFlight: true)
+                )
 
             case .setSearchResults(.success(let items)):
-                // Only update if the search query hasn't become empty since the request started
+                state.isLoading = false
+                
                 guard !state.searchQuery.isEmpty else {
-                   return .none
+                   return .send(.delegate(.searchLoadingFinished))
                 }
                 state.searchResults = items
-                return .none
+                return .send(.delegate(.searchLoadingFinished))
 
             case .setSearchResults(.failure):
-                 // Only process failure if query is still active
+                state.isLoading = false
+                
                 guard !state.searchQuery.isEmpty else {
-                   return .none
+                   return .send(.delegate(.searchLoadingFinished))
                 }
                 state.searchResults = []
-                // Send delegate action on failure
-                return .send(.delegate(.searchFailed))
+                return .concatenate(
+                    .send(.delegate(.searchFailed)),
+                    .send(.delegate(.searchLoadingFinished))
+                )
 
             case .delegate:
                 return .none

@@ -5,46 +5,46 @@
 //  Created by Federico Torres on 16/05/25.
 //
 
-
 import ComposableArchitecture
 import Foundation
 
 @Reducer
-struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
+public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
     private let nestedItemsRepository: NestedItemsRepository<ID>
 
-    init(repository: NestedItemsRepository<ID>) {
+    public init(repository: NestedItemsRepository<ID>) {
         self.nestedItemsRepository = repository
     }
 
     @ObservableState
-    struct State: Equatable, Identifiable {
-        let id: ID
-        var nested: IdentifiedArrayOf<State> = []
-        var pickerModel: PickerItemModel<ID>?
-        var includeChildrenEnabled = false
-        var selectedChildrenCount: SelectedChildrenCount<ID>.State?
-        var searchItems: SearchItems<ID>.State?
-        let showSelectedChildrenCount: Bool
-        var showSearchBar = true
-        var title = ""
-        var emptyStateReason: EmptyStateReason?
+    public struct State: Equatable, Identifiable {
+        public let id: ID
+        public var nested: IdentifiedArrayOf<State> = []
+        public var pickerModel: PickerItemModel<ID>?
+        public var includeChildrenEnabled = false
+        public var selectedChildrenCount: SelectedChildrenCount<ID>.State?
+        public var searchItems: SearchItems<ID>.State?
+        public let showSelectedChildrenCount: Bool
+        public var showSearchBar = true
+        public var title = ""
+        public var emptyStateReason: EmptyStateReason?
+        public var isLoading = false
 
         @ObservationStateIgnored
-        @Shared var allSelectedItems: Set<ID>
+        @Shared public var allSelectedItems: Set<ID>
 
-        var isSelected: Bool {
+        public var isSelected: Bool {
             return allSelectedItems.contains(id)
         }
 
-        init(
+        public init(
             id: ID,
             pickerModel: PickerItemModel<ID>? = nil,
             includeChildrenEnabled: Bool = false,
             showSelectedChildrenCount: Bool,
             showSearchBar: Bool = true,
             title: String = "",
-            allSelectedItems: Shared<Set<ID>>,
+            allSelectedItems: Shared<Set<ID>> = Shared(value: []),
         ) {
             self.id = id
             self.pickerModel = pickerModel
@@ -58,7 +58,7 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
             self.selectedChildrenCount = showSelectedChildrenCount && pickerModel != nil ? SelectedChildrenCount<ID>.State(allSelectedItems: allSelectedItems, item: pickerModel!) : nil
         }
 
-        init(
+        public init(
             id: ID,
             initialItems: IdentifiedArrayOf<PickerItemModel<ID>>,
             includeChildrenEnabled: Bool = false,
@@ -76,7 +76,6 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
             self.title = title
             self._allSelectedItems = allSelectedItems
 
-            // Map initial items directly
             self.nested = mapItemsToNestedState(
                 initialItems,
                 parentIncludeChildrenEnabled: includeChildrenEnabled,
@@ -98,6 +97,7 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
             showSearchBar: Bool = true,
             title: String = "",
             emptyStateReason: EmptyStateReason? = nil,
+            isLoading: Bool = false,
             allSelectedItems: Shared<Set<ID>>
         ) {
             self.id = id
@@ -110,20 +110,20 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
             self.showSearchBar = showSearchBar
             self.title = title.isEmpty && pickerModel != nil ? pickerModel!.displayName : title
             self.emptyStateReason = emptyStateReason
+            self.isLoading = isLoading
             self._allSelectedItems = allSelectedItems
         }
     #endif
     }
 
-
-    enum EmptyStateReason {
+    public enum EmptyStateReason {
         case noChildrenFound
         case searchResultEmpty
         case errorLoadingChildren
         case errorSearchingItems
     }
 
-    enum Action: BindableAction {
+    public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case selectedChildrenCount(SelectedChildrenCount<ID>.Action)
         case searchItems(SearchItems<ID>.Action)
@@ -137,10 +137,8 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
         case setIncludeChildrenEnabled(Bool)
     }
 
-    var body: some ReducerOf<Self> {
-
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
-            print("Received action: \(String(describing: action))")
             switch action {
             case .binding:
                 return .none
@@ -156,12 +154,14 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
                     }
                 }
             case .onFirstAppear:
-                // Only fetch if nested items are not already populated (e.g., by initializer)
                 guard state.nested.isEmpty else { return .none }
 
                 if state.showSearchBar {
                     state.searchItems = SearchItems.State()
                 }
+                
+                state.isLoading = true
+                
                 return .run { [parentId = state.id] send in
                     await send(.setItems(
                         Result(catching: {
@@ -170,6 +170,8 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
                     ))
                 }
             case .setItems(.success(let items)):
+                state.isLoading = false
+                
                 guard !items.isEmpty else {
                     state.emptyStateReason = .noChildrenFound
                     state.nested = []
@@ -179,6 +181,8 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
                 state.nested = self.mapItemsToState(items, state: state)
                 return .none
             case .setItems(.failure):
+                state.isLoading = false
+                
                 state.nested = []
                 state.emptyStateReason = .errorLoadingChildren
                 return .none
@@ -214,6 +218,14 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
                 }
             case .selectedChildrenCount:
                 return .none
+            case .searchItems(.delegate(.searchLoadingStarted)):
+                state.isLoading = true
+                return .none
+                
+            case .searchItems(.delegate(.searchLoadingFinished)):
+                state.isLoading = false
+                return .none
+                
             case .searchItems(.setSearchResults(.success(let items))):
                 guard !items.isEmpty else {
                     state.emptyStateReason = .searchResultEmpty
@@ -227,6 +239,9 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
 
                 state.nested = []
                 state.emptyStateReason = nil
+                
+                state.isLoading = true
+                
                 return .run { [parentId = state.id] send in
                     await send(.setItems(
                         Result(catching: {
@@ -253,12 +268,10 @@ struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer {
         }
     }
 
-    // MARK: - Private Helpers
     private func handleToggleSelection(state: inout State) -> Effect<Action> {
         var effects: [Effect<Action>] = []
 
         if state.includeChildrenEnabled {
-            // Capture the values we need from state before the escaping closure
             let currentId = state.id
             let isSelected = state.isSelected
 
@@ -321,7 +334,6 @@ fileprivate extension Set {
         }
     }
 }
-
 
 fileprivate extension NestedItemsPicker.Action {
     var containsToggleSelection: Bool {
