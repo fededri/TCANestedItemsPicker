@@ -78,9 +78,6 @@ let allMockItems: [PickerItemModel<String>] = [
 
 
 let fakeNestedRepository = NestedItemsRepository<String>(
-    rootItems: {
-        return IdentifiedArray(uniqueElements: rootItems)
-    },
     childrenItemsByParentId: { parentId in
        return IdentifiedArray(uniqueElements: getMockChildren(for: parentId))
     }, allDescendantsIDs: { parentId in

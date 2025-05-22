@@ -30,13 +30,14 @@ struct NestedItemsPickerTests {
 
         await store.send(.onFirstAppear) {
             $0.searchItems = SearchItems<String>.State()
+            $0.isLoading = true
         }
 
         await store.receive(\.setItems) { state in
+            state.isLoading = false
             state.nested = IdentifiedArray(uniqueElements: rootItems.map { pickerModel in
                 makeExpectedNestedState(item: pickerModel, parentState: state)
             })
-
         }
     }
 
@@ -206,9 +207,16 @@ struct NestedItemsPickerTests {
             $0.searchItems?.searchQuery = query
         }
 
-        await store.send(.searchItems(.searchQueryDebounced))
+        await store.send(.searchItems(.searchQueryDebounced)) {
+            $0.searchItems?.isLoading = true
+        }
+
+        await store.receive(\.searchItems.delegate.searchLoadingStarted) {
+            $0.isLoading = true
+        }
 
         await store.receive(\.searchItems.setSearchResults) { state in
+            state.searchItems?.isLoading = false
             state.searchItems?.searchResults = results
             state.emptyStateReason = nil
             state.nested = IdentifiedArrayOf(
@@ -216,6 +224,10 @@ struct NestedItemsPickerTests {
                     makeExpectedNestedState(item: itemModel, parentState: initialState)
                 }
             )
+        }
+
+        await store.receive(\.searchItems.delegate.searchLoadingFinished) {
+            $0.isLoading = false
         }
     }
 
@@ -260,9 +272,12 @@ struct NestedItemsPickerTests {
 
         await store.receive(\.searchItems.delegate.searchCleared, timeout: .seconds(1)) {
             $0.nested = []
+            $0.isLoading = true
         }
 
-        await store.receive(\.setItems.success, timeout: .seconds(1))
+        await store.receive(\.setItems.success, timeout: .seconds(1)) {
+            $0.isLoading = false
+        }
     }
 
 
@@ -294,12 +309,23 @@ struct NestedItemsPickerTests {
             $0.searchItems?.searchQuery = query
         }
 
-        await store.send(.searchItems(.searchQueryDebounced))
+        await store.send(.searchItems(.searchQueryDebounced)) {
+            $0.searchItems?.isLoading = true
+        }
+
+        await store.receive(\.searchItems.delegate.searchLoadingStarted) {
+            $0.isLoading = true
+        }
 
         await store.receive(\.searchItems.setSearchResults) { state in
+            state.searchItems?.isLoading = false
             state.searchItems?.searchResults = []
             state.emptyStateReason = .searchResultEmpty
             state.nested = []
+        }
+
+        await store.receive(\.searchItems.delegate.searchLoadingFinished) {
+            $0.isLoading = false
         }
     }
 }

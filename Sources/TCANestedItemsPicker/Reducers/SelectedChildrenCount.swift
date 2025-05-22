@@ -25,11 +25,6 @@ public struct SelectedChildrenCount<ID: Hashable & Sendable>: Reducer, Sendable 
         public let item: PickerItemModel<ID>
         public var selectedChildrenCount: Int = 0
 
-        public init(allSelectedItems: Shared<Set<ID>>, item: PickerItemModel<ID>) {
-            self._allSelectedItems = allSelectedItems
-            self.item = item
-        }
-
         public var countDisplayText: String {
             if selectedChildrenCount > 0 {
                 "\(selectedChildrenCount) included"

@@ -22,10 +22,6 @@ public struct SearchItems<ID: Hashable & Sendable>: Reducer, Sendable {
         public var searchQuery = ""
         public var searchResults: IdentifiedArrayOf<PickerModel> = []
         public var isLoading = false
-        
-        public init(searchQuery: String = "") {
-            self.searchQuery = searchQuery
-        }
     }
 
     @CasePathable

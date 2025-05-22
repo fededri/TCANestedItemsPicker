@@ -22,7 +22,6 @@ public struct NestedItemsPickerView<ID: Hashable & Sendable, EmptyStateContent: 
 
     public var body: some View {
         WithPerceptionTracking {
-            NavigationStack {
                 ZStack {
                     formContent
                         .navigationTitle(store.title)
@@ -35,7 +34,6 @@ public struct NestedItemsPickerView<ID: Hashable & Sendable, EmptyStateContent: 
                         loadingOverlay
                     }
                 }
-            }
         }
     }
     

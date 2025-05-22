@@ -31,7 +31,7 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
         public var isLoading = false
 
         @ObservationStateIgnored
-        @Shared var allSelectedItems: Set<ID>
+        @Shared public var allSelectedItems: Set<ID>
 
         public var isSelected: Bool {
             return allSelectedItems.contains(id)
