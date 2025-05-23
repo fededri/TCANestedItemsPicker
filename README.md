@@ -2,9 +2,7 @@
 [![Swift Version](https://img.shields.io/badge/Swift-6.0%2B-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS%2016%2B-blue.svg)](https://developer.apple.com/iOS)
 [![TCA Version](https://img.shields.io/badge/TCA-1.18%2B-purple.svg)](https://github.com/pointfreeco/swift-composable-architecture)
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT) 
-<!-- Add other relevant badges like build status -->
-
+[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
 
 A powerful, reusable SwiftUI component built with **The Composable Architecture (TCA)** for selecting items from hierarchical (tree-like) data structures. Perfect for categories, organizational structures, file systems, or any nested data that requires user selection.
@@ -193,198 +191,6 @@ struct CategoryPickerView: View {
     }
 }
 ```
-## 📚 Detailed Usage
-
-### State Configuration Options
-
-```swift
-NestedItemsPicker<String>.State(
-    id: "root",                           // the ID used for your root item
-    includeChildrenEnabled: true,         // Enable recursive selection
-    showSelectedChildrenCount: true,      // Show count of selected children
-    showSearchBar: true,                  // Enable search functionality
-    title: "Select Items",               // Navigation title
-    allSelectedItems: Shared<Set<ID>> // Shared selection state
-)
-```
-
-### Advanced Usage with Multiple Pickers
-
-Share selection state across multiple picker features using TCA dependencies:
-
-```swift
-// Shared app state for selection coordination
-@Reducer
-struct AppFeature {
-    @ObservableState
-    struct State: Equatable {
-        var sharedSelection: Set<String> = []
-        var categoryPicker = CategoryPickerFeature.State()
-        var locationPicker = LocationPickerFeature.State()
-        
-        init() {
-            // Initialize both pickers with shared selection
-            let sharedState = Shared(value: sharedSelection)
-            categoryPicker.pickerState.$allSelectedItems = sharedState
-            locationPicker.pickerState.$allSelectedItems = sharedState
-        }
-    }
-    
-    enum Action {
-        case categoryPicker(CategoryPickerFeature.Action)
-        case locationPicker(LocationPickerFeature.Action)
-    }
-    
-    var body: some ReducerOf<Self> {
-        Scope(state: \.categoryPicker, action: \.categoryPicker) {
-            CategoryPickerFeature()
-        }
-        Scope(state: \.locationPicker, action: \.locationPicker) {
-            LocationPickerFeature()
-        }
-        
-        Reduce { state, action in
-            // Sync selection changes across pickers
-            switch action {
-            case .categoryPicker, .locationPicker:
-                state.sharedSelection = state.categoryPicker.selectedCategories.union(
-                    state.locationPicker.selectedLocations
-                )
-                return .none
-            }
-        }
-    }
-}
-
-// App view with multiple pickers
-struct MultiPickerView: View {
-    let store: StoreOf<AppFeature>
-    
-    var body: some View {
-        TabView {
-            CategoryPickerView(
-                store: store.scope(state: \.categoryPicker, action: \.categoryPicker)
-            )
-            .tabItem { Label("Categories", systemImage: "list.bullet") }
-            
-            LocationPickerView(
-                store: store.scope(state: \.locationPicker, action: \.locationPicker)
-            )
-            .tabItem { Label("Locations", systemImage: "location") }
-        }
-    }
-}
-```
-
-## 🏗️ Advanced Dependency Patterns
-
-### Environment-Specific Repository Configurations
-
-Configure different repositories for different environments:
-
-```swift
-extension DependencyValues {
-    var categoryRepository: NestedItemsRepository<String> {
-        get { self[CategoryRepositoryKey.self] }
-        set { self[CategoryRepositoryKey.self] = newValue }
-    }
-}
-
-private enum CategoryRepositoryKey: DependencyKey {
-    static let liveValue = NestedItemsRepository<String>.live
-    static let testValue = NestedItemsRepository<String>.mock
-    static let previewValue = NestedItemsRepository<String>.preview
-}
-
-// Different implementations for different environments
-extension NestedItemsRepository where ID == String {
-    // Production with real API calls
-    static let live = NestedItemsRepository<String>(/* production implementation */)
-    
-    // Fast mock for unit tests
-    static let mock = NestedItemsRepository<String>(/* mock implementation */)
-    
-    // Rich preview data for SwiftUI previews
-    static let preview = NestedItemsRepository<String>(
-        childrenItemsByParentId: { parentId in
-            // Return rich, realistic preview data
-            let previewData = PreviewDataGenerator.generateCategories(for: parentId)
-            return IdentifiedArray(uniqueElements: previewData)
-        },
-        allDescendantsIDs: { parentId in
-            return PreviewDataGenerator.getAllDescendants(for: parentId)
-        },
-        searchItems: { query in
-            return PreviewDataGenerator.searchCategories(query: query)
-        }
-    )
-}
-```
-
-### Custom Dependency with Configuration
-
-Create a repository with configurable behavior:
-
-```swift
-struct CategoryRepositoryConfiguration {
-    let enableCaching: Bool
-    let maxCacheSize: Int
-    let apiTimeout: TimeInterval
-}
-
-extension DependencyValues {
-    var categoryRepositoryConfig: CategoryRepositoryConfiguration {
-        get { self[CategoryRepositoryConfigKey.self] }
-        set { self[CategoryRepositoryConfigKey.self] = newValue }
-    }
-}
-
-private enum CategoryRepositoryConfigKey: DependencyKey {
-    static let liveValue = CategoryRepositoryConfiguration(
-        enableCaching: true,
-        maxCacheSize: 1000,
-        apiTimeout: 30.0
-    )
-    static let testValue = CategoryRepositoryConfiguration(
-        enableCaching: false,
-        maxCacheSize: 0,
-        apiTimeout: 1.0
-    )
-}
-
-// Repository that uses configuration
-extension NestedItemsRepository where ID == String {
-    static var live: Self {
-        @Dependency(\.categoryRepositoryConfig) var config
-        @Dependency(\.apiClient) var apiClient
-        
-        return NestedItemsRepository<String>(
-            childrenItemsByParentId: { parentId in
-                if config.enableCaching, let cached = CategoryCache.get(parentId) {
-                    return cached
-                }
-                
-                let result = try await apiClient.fetchCategories(
-                    parentId: parentId,
-                    timeout: config.apiTimeout
-                )
-                
-                if config.enableCaching {
-                    CategoryCache.store(result, for: parentId, maxSize: config.maxCacheSize)
-                }
-                
-                return result
-            },
-            allDescendantsIDs: { parentId in
-                return await apiClient.fetchAllDescendants(parentId: parentId)
-            },
-            searchItems: { query in
-                return await apiClient.searchCategories(query: query)
-            }
-        )
-    }
-}
-```
 
 ## 🧪 Testing
 
@@ -394,60 +200,22 @@ The library is designed with TCA's testing philosophy in mind:
 @Test
 func testItemSelection() async {
     let store = TestStore(
-        initialState: NestedItemsPicker<String>.State(
-            id: "root",
-            showSelectedChildrenCount: false,
-            allSelectedItems: Shared(value: [])
-        )
+        initialState: CategoryPickerFeature.State()
     ) {
-        NestedItemsPicker<String>(repository: .mock)
+        CategoryPickerFeature()
     }
+    // optionally modify your mock repository
     
     // Test selection behavior
-    await store.send(.toggleSelection) {
-        $0.allSelectedItems = ["root"]
+    await store.send(.picker.toggleSelection) {
+        // test changes in your state
     }
 }
 ```
 
 ## 🎨 Customization
 
-### Custom Row Views
-
-While the library provides a default UI, you can create your own views and reuse library's ```NestedItemsPicker```reducer:
-
-## 📖 API Reference
-
-### `PickerItemModel<ID>`
-
-```swift
-public struct PickerItemModel<ID: Hashable & Sendable>: Identifiable, Equatable, Sendable {
-    public let id: ID
-    public let displayName: String
-    public let hasChildren: Bool
-}
-```
-
-### `NestedItemsRepository<ID>`
-
-```swift
-public struct NestedItemsRepository<ID: Hashable & Sendable>: Sendable {
-    public var childrenItemsByParentId: @Sendable (ID) async throws -> IdentifiedArrayOf<Model>
-    public var allDescendantsIDs: @Sendable (ID) async -> [ID]
-    public var searchItems: @Sendable (String) async -> IdentifiedArrayOf<Model>
-}
-```
-
-### `EmptyStateReason`
-
-```swift
-public enum EmptyStateReason {
-    case noChildrenFound          // Item has no children
-    case searchResultEmpty        // Search returned no results
-    case errorLoadingChildren     // Failed to load children
-    case errorSearchingItems      // Search operation failed
-}
-```
+While the library provides a default UI, you can create your own views and reuse library's ```NestedItemsPicker```reducer
 
 ## 🤝 Contributing
 
