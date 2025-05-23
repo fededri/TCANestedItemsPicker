@@ -7,6 +7,8 @@
 
 A powerful, reusable SwiftUI component built with **The Composable Architecture (TCA)** for selecting items from hierarchical (tree-like) data structures. Perfect for categories, organizational structures, file systems, or any nested data that requires user selection.
 
+https://github.com/user-attachments/assets/34f24ade-9f72-444a-8686-19ebff524592
+
 ## ✨ Features
 
 - **🌳 Hierarchical Display**: Expandable, nested list format with navigation between levels
