@@ -31,11 +31,11 @@ The library follows TCA principles with clear separation of concerns:
 - **`NestedItemsRepository`**: Protocol for data access and business logic
 - **`PickerItemModel`**: Core data model representing hierarchical items
 
-## 📋 Requirements
+## 📋 Versioning
 
 - **iOS**: 16.0+
 - **Swift**: 6.0+
-- **Dependencies**: [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) 1.18.0+
+- **Dependencies**: [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) 1.19.1+
 
 ## 📦 Installation
 
