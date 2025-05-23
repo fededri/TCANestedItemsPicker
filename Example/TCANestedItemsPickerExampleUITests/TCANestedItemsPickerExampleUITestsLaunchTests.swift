@@ -1,13 +1,13 @@
 //
-//  TestLibraryUITestsLaunchTests.swift
-//  TestLibraryUITests
+//  TCANestedItemsPickerExampleUITestsLaunchTests.swift
+//  TCANestedItemsPickerExampleUITests
 //
 //  Created by Federico Torres on 20/05/25.
 //
 
 import XCTest
 
-final class TestLibraryUITestsLaunchTests: XCTestCase {
+final class TCANestedItemsPickerExampleUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

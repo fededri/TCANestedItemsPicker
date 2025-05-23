@@ -17,37 +17,37 @@
 			containerPortal = 007F793F2DDC566700BEE0FC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 007F79462DDC566700BEE0FC;
-			remoteInfo = TestLibrary;
+			remoteInfo = TCANestedItemsPickerExample;
 		};
 		007F79602DDC566800BEE0FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 007F793F2DDC566700BEE0FC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 007F79462DDC566700BEE0FC;
-			remoteInfo = TestLibrary;
+			remoteInfo = TCANestedItemsPickerExample;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		007F79472DDC566700BEE0FC /* TestLibrary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestLibrary.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		007F79552DDC566800BEE0FC /* TestLibraryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestLibraryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		007F795F2DDC566800BEE0FC /* TestLibraryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestLibraryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		007F79472DDC566700BEE0FC /* TCANestedItemsPickerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TCANestedItemsPickerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		007F79552DDC566800BEE0FC /* TCANestedItemsPickerExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TCANestedItemsPickerExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		007F795F2DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TCANestedItemsPickerExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		007F79492DDC566700BEE0FC /* TestLibrary */ = {
+		007F79492DDC566700BEE0FC /* TCANestedItemsPickerExample */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TestLibrary;
+			path = TCANestedItemsPickerExample;
 			sourceTree = "<group>";
 		};
-		007F79582DDC566800BEE0FC /* TestLibraryTests */ = {
+		007F79582DDC566800BEE0FC /* TCANestedItemsPickerExampleTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TestLibraryTests;
+			path = TCANestedItemsPickerExampleTests;
 			sourceTree = "<group>";
 		};
-		007F79622DDC566800BEE0FC /* TestLibraryUITests */ = {
+		007F79622DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TestLibraryUITests;
+			path = TCANestedItemsPickerExampleUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -82,9 +82,9 @@
 		007F793E2DDC566700BEE0FC = {
 			isa = PBXGroup;
 			children = (
-				007F79492DDC566700BEE0FC /* TestLibrary */,
-				007F79582DDC566800BEE0FC /* TestLibraryTests */,
-				007F79622DDC566800BEE0FC /* TestLibraryUITests */,
+				007F79492DDC566700BEE0FC /* TCANestedItemsPickerExample */,
+				007F79582DDC566800BEE0FC /* TCANestedItemsPickerExampleTests */,
+				007F79622DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests */,
 				007F79482DDC566700BEE0FC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -92,9 +92,9 @@
 		007F79482DDC566700BEE0FC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				007F79472DDC566700BEE0FC /* TestLibrary.app */,
-				007F79552DDC566800BEE0FC /* TestLibraryTests.xctest */,
-				007F795F2DDC566800BEE0FC /* TestLibraryUITests.xctest */,
+				007F79472DDC566700BEE0FC /* TCANestedItemsPickerExample.app */,
+				007F79552DDC566800BEE0FC /* TCANestedItemsPickerExampleTests.xctest */,
+				007F795F2DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,9 +102,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		007F79462DDC566700BEE0FC /* TestLibrary */ = {
+		007F79462DDC566700BEE0FC /* TCANestedItemsPickerExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 007F79692DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibrary" */;
+			buildConfigurationList = 007F79692DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExample" */;
 			buildPhases = (
 				007F79432DDC566700BEE0FC /* Sources */,
 				007F79442DDC566700BEE0FC /* Frameworks */,
@@ -115,20 +115,20 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				007F79492DDC566700BEE0FC /* TestLibrary */,
+				007F79492DDC566700BEE0FC /* TCANestedItemsPickerExample */,
 			);
-			name = TestLibrary;
+			name = TCANestedItemsPickerExample;
 			packageProductDependencies = (
 				00C4F7122DDD6A8E00803D1E /* TCANestedItemsPicker */,
 				00C4F7A82DE0218B00803D1E /* TCANestedItemsPicker */,
 			);
-			productName = TestLibrary;
-			productReference = 007F79472DDC566700BEE0FC /* TestLibrary.app */;
+			productName = TCANestedItemsPickerExample;
+			productReference = 007F79472DDC566700BEE0FC /* TCANestedItemsPickerExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		007F79542DDC566800BEE0FC /* TestLibraryTests */ = {
+		007F79542DDC566800BEE0FC /* TCANestedItemsPickerExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 007F796C2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibraryTests" */;
+			buildConfigurationList = 007F796C2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExampleTests" */;
 			buildPhases = (
 				007F79512DDC566800BEE0FC /* Sources */,
 				007F79522DDC566800BEE0FC /* Frameworks */,
@@ -140,18 +140,18 @@
 				007F79572DDC566800BEE0FC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				007F79582DDC566800BEE0FC /* TestLibraryTests */,
+				007F79582DDC566800BEE0FC /* TCANestedItemsPickerExampleTests */,
 			);
-			name = TestLibraryTests;
+			name = TCANestedItemsPickerExampleTests;
 			packageProductDependencies = (
 			);
-			productName = TestLibraryTests;
-			productReference = 007F79552DDC566800BEE0FC /* TestLibraryTests.xctest */;
+			productName = TCANestedItemsPickerExampleTests;
+			productReference = 007F79552DDC566800BEE0FC /* TCANestedItemsPickerExampleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		007F795E2DDC566800BEE0FC /* TestLibraryUITests */ = {
+		007F795E2DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 007F796F2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibraryUITests" */;
+			buildConfigurationList = 007F796F2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExampleUITests" */;
 			buildPhases = (
 				007F795B2DDC566800BEE0FC /* Sources */,
 				007F795C2DDC566800BEE0FC /* Frameworks */,
@@ -163,13 +163,13 @@
 				007F79612DDC566800BEE0FC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				007F79622DDC566800BEE0FC /* TestLibraryUITests */,
+				007F79622DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests */,
 			);
-			name = TestLibraryUITests;
+			name = TCANestedItemsPickerExampleUITests;
 			packageProductDependencies = (
 			);
-			productName = TestLibraryUITests;
-			productReference = 007F795F2DDC566800BEE0FC /* TestLibraryUITests.xctest */;
+			productName = TCANestedItemsPickerExampleUITests;
+			productReference = 007F795F2DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -195,7 +195,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 007F79422DDC566700BEE0FC /* Build configuration list for PBXProject "TestLibrary" */;
+			buildConfigurationList = 007F79422DDC566700BEE0FC /* Build configuration list for PBXProject "TCANestedItemsPickerExample" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -212,9 +212,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				007F79462DDC566700BEE0FC /* TestLibrary */,
-				007F79542DDC566800BEE0FC /* TestLibraryTests */,
-				007F795E2DDC566800BEE0FC /* TestLibraryUITests */,
+				007F79462DDC566700BEE0FC /* TCANestedItemsPickerExample */,
+				007F79542DDC566800BEE0FC /* TCANestedItemsPickerExampleTests */,
+				007F795E2DDC566800BEE0FC /* TCANestedItemsPickerExampleUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -270,12 +270,12 @@
 /* Begin PBXTargetDependency section */
 		007F79572DDC566800BEE0FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 007F79462DDC566700BEE0FC /* TestLibrary */;
+			target = 007F79462DDC566700BEE0FC /* TCANestedItemsPickerExample */;
 			targetProxy = 007F79562DDC566800BEE0FC /* PBXContainerItemProxy */;
 		};
 		007F79612DDC566800BEE0FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 007F79462DDC566700BEE0FC /* TestLibrary */;
+			target = 007F79462DDC566700BEE0FC /* TCANestedItemsPickerExample */;
 			targetProxy = 007F79602DDC566800BEE0FC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -402,7 +402,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TestLibrary/TestLibrary.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TCANestedItemsPickerExample/TCANestedItemsPickerExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3ZP6TNB33L;
@@ -424,7 +424,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibrary;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -441,7 +441,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TestLibrary/TestLibrary.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TCANestedItemsPickerExample/TCANestedItemsPickerExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3ZP6TNB33L;
@@ -463,7 +463,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibrary;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -486,14 +486,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibraryTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestLibrary.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestLibrary";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TCANestedItemsPickerExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TCANestedItemsPickerExample";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Debug;
@@ -509,14 +509,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibraryTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestLibrary.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TestLibrary";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TCANestedItemsPickerExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TCANestedItemsPickerExample";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Release;
@@ -531,14 +531,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibraryUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = TestLibrary;
+				TEST_TARGET_NAME = TCANestedItemsPickerExample;
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Debug;
@@ -553,14 +553,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TestLibraryUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fededri.TCANestedItemsPickerExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = TestLibrary;
+				TEST_TARGET_NAME = TCANestedItemsPickerExample;
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Release;
@@ -568,7 +568,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		007F79422DDC566700BEE0FC /* Build configuration list for PBXProject "TestLibrary" */ = {
+		007F79422DDC566700BEE0FC /* Build configuration list for PBXProject "TCANestedItemsPickerExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				007F79672DDC566800BEE0FC /* Debug */,
@@ -577,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		007F79692DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibrary" */ = {
+		007F79692DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				007F796A2DDC566800BEE0FC /* Debug */,
@@ -586,7 +586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		007F796C2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibraryTests" */ = {
+		007F796C2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				007F796D2DDC566800BEE0FC /* Debug */,
@@ -595,7 +595,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		007F796F2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TestLibraryUITests" */ = {
+		007F796F2DDC566800BEE0FC /* Build configuration list for PBXNativeTarget "TCANestedItemsPickerExampleUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				007F79702DDC566800BEE0FC /* Debug */,
