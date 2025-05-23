@@ -31,6 +31,9 @@ playground.xcworkspace
 
 .build/
 
+# Xcode workspace generated for Swift Package Manager
+.swiftpm/xcode/package.xcworkspace
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
