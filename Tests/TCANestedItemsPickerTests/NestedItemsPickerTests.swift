@@ -183,7 +183,6 @@ struct NestedItemsPickerTests {
     @Test
     func testSearchItems_setSearchResultsUpdatesNestedState() async {
         let sharedSelectedItems = makeSharedState(initialValue: [])
-        #expect(true == false)
         let initialState = NestedItemsPicker<String>.State(
             id: "root",
             pickerModel: nil,
