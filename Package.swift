@@ -16,7 +16,7 @@ let package = Package(
             targets: ["TCANestedItemsPicker"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.19.1")
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.20.2")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
