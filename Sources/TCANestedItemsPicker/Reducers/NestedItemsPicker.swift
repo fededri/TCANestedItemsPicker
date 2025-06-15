@@ -123,6 +123,7 @@ public struct NestedItemsPicker<ID: Hashable & Sendable>: Reducer, Sendable {
         case errorSearchingItems
     }
 
+    @CasePathable
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case selectedChildrenCount(SelectedChildrenCount<ID>.Action)

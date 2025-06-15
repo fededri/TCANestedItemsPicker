@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "TCANestedItemsPicker",
     platforms: [
-        .iOS(.v16)
+        .iOS(.v16),
+        .macOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -15,7 +16,7 @@ let package = Package(
             targets: ["TCANestedItemsPicker"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.19.1")
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.20.2")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
