@@ -28,4 +28,4 @@ jobs:
         xcodebuild -version
         
     - name: Run Tests
-      run: xcodebuild test -scheme TCANestedItemsPicker -skipMacroValidation -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=18.0'
+      run: xcodebuild test -scheme TCANestedItemsPicker -skipMacroValidation -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4'
