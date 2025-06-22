@@ -229,4 +229,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-Built with using [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) by Point-Free.
+Built using [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) by Point-Free.
